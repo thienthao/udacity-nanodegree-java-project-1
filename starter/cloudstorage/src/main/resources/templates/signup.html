@@ -9,40 +9,60 @@
         <title>Sign Up</title>
     </head>
     <body class="p-3 mb-2 bg-light text-black">
-        <div class="container justify-content-center w-50 p-3" style="background-color: #eeeeee; margin-top: 5em;">
+        <div class="container justify-content-center w-50 p-3"
+             style="background-color: #eeeeee; margin-top: 5em;">
             <div class="form-group">
-                <label><a>Back to Login</a></label>
+                <label><a th:href="@{/login}">Back to Login</a></label>
             </div>
 
             <h1 class="display-5">Sign Up</h1>
-            <form action="#" method="POST">
-                <div id="success-msg" class="alert alert-dark">
-                    You successfully signed up! Please continue to the <a>login</a> page.
+            <form method="POST" th:action="@{/signup}">
+                <div class="alert alert-dark" id="success-msg" th:if="${signupSuccess}">
+                    You successfully signed up! You will be redirect to <a href="/login">login</a>
+                    page.
+                    <meta content="3; url=/" http-equiv="refresh"/>
                 </div>
-                <div class="alert alert-danger">
-                    <span>Example Signup Error Message</span>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="inputFirstName">First Name</label>
-                        <input type="input" name="firstName" class="form-control" id="inputFirstName" placeholder="Enter First Name" maxlength="20" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputLastName">Last Name</label>
-                        <input type="input" name="lastName" class="form-control" id="inputLastName" placeholder="Enter Last Name" maxlength="20" required>
-                    </div>
+                <div class="alert alert-danger" th:if="${signupError}">
+                    <span th:text="${signupError}"></span>
+                    </br>
+                    <th:block th:each="error : ${validationError}">
+                        <span th:text="${error.defaultMessage}"></span>
+                        </br>
+                    </th:block>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="inputUsername">Username</label>
-                        <input type="input" name="username" class="form-control" id="inputUsername" placeholder="Enter Username" maxlength="20" required>
+                        <label for="firstName">First Name</label>
+                        <input class="form-control" id="firstName" maxlength="20" name="firstName"
+                               onblur="this.setAttribute('readonly','');" onfocus="this.removeAttribute('readonly');" placeholder="Enter First Name" readonly
+                               required
+                               type="input">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="inputPassword">Password</label>
-                        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Enter Password" maxlength="20" required>
+                        <label for="lastName">Last Name</label>
+                        <input class="form-control" id="lastName" maxlength="20" name="lastName"
+                               onblur="this.setAttribute('readonly','');" onfocus="this.removeAttribute('readonly');" placeholder="Enter Last Name" readonly
+                               required
+                               type="input">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" id="buttonSignUp">Sign Up</button>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="username">Username</label>
+                        <input class="form-control" id="username" maxlength="20" name="username"
+                               onblur="this.setAttribute('readonly','');" onfocus="this.removeAttribute('readonly');" placeholder="Enter Username" readonly
+                               required
+                               type="input">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="password">Password</label>
+                        <input class="form-control" id="password" maxlength="20" name="password"
+                               onblur="this.setAttribute('readonly','');" onfocus="this.removeAttribute('readonly');" placeholder="Enter Password" readonly
+                               required
+                               type="password">
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="signup-button" type="submit">Sign Up</button>
             </form>
         </div>
     </body>

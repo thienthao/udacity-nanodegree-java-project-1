@@ -1,0 +1,31 @@
+logging:
+  level:
+    root: INFO
+    org.hibernate: DEBUG
+spring:
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+  sql:
+    init:
+      schema-locations: classpath:/schema-h2.sql
+  datasource:
+    url: jdbc:h2:mem:super_duper_drive;DB_CLOSE_ON_EXIT=FALSE
+    username: admin
+    password: admin
+    driver-class-name: org.h2.Driver
+  main:
+    banner-mode: off
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto:false
+        format_sql:true
+        show-sql:true
+  h2:
+    console:
+      enabled:true
+server:
+  tomcat:
+    max-swallow-size: -1

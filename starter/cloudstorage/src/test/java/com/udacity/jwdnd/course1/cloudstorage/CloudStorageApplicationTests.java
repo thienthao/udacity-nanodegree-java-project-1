@@ -13,6 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import java.io.File;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
@@ -52,34 +56,34 @@ class CloudStorageApplicationTests {
 		// Create a dummy account for logging in later.
 
 		// Visit the sign-up page.
-		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
 		driver.get("http://localhost:" + this.port + "/signup");
 		webDriverWait.until(ExpectedConditions.titleContains("Sign Up"));
 		
 		// Fill out credentials
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputFirstName")));
-		WebElement inputFirstName = driver.findElement(By.id("inputFirstName"));
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("firstName")));
+		WebElement inputFirstName = driver.findElement(By.id("firstName"));
 		inputFirstName.click();
 		inputFirstName.sendKeys(firstName);
 
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputLastName")));
-		WebElement inputLastName = driver.findElement(By.id("inputLastName"));
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("lastName")));
+		WebElement inputLastName = driver.findElement(By.id("lastName"));
 		inputLastName.click();
 		inputLastName.sendKeys(lastName);
 
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputUsername")));
-		WebElement inputUsername = driver.findElement(By.id("inputUsername"));
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("username")));
+		WebElement inputUsername = driver.findElement(By.id("username"));
 		inputUsername.click();
 		inputUsername.sendKeys(userName);
 
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputPassword")));
-		WebElement inputPassword = driver.findElement(By.id("inputPassword"));
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password")));
+		WebElement inputPassword = driver.findElement(By.id("password"));
 		inputPassword.click();
 		inputPassword.sendKeys(password);
 
 		// Attempt to sign up.
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("buttonSignUp")));
-		WebElement buttonSignUp = driver.findElement(By.id("buttonSignUp"));
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("signup-button")));
+		WebElement buttonSignUp = driver.findElement(By.id("signup-button"));
 		buttonSignUp.click();
 
 		/* Check that the sign up was successful. 
@@ -99,15 +103,15 @@ class CloudStorageApplicationTests {
 	{
 		// Log in to our dummy account.
 		driver.get("http://localhost:" + this.port + "/login");
-		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputUsername")));
-		WebElement loginUserName = driver.findElement(By.id("inputUsername"));
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("username")));
+		WebElement loginUserName = driver.findElement(By.id("username"));
 		loginUserName.click();
 		loginUserName.sendKeys(userName);
 
-		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inputPassword")));
-		WebElement loginPassword = driver.findElement(By.id("inputPassword"));
+		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password")));
+		WebElement loginPassword = driver.findElement(By.id("password"));
 		loginPassword.click();
 		loginPassword.sendKeys(password);
 
@@ -133,8 +137,8 @@ class CloudStorageApplicationTests {
 	@Test
 	public void testRedirection() {
 		// Create a test account
-		doMockSignUp("Redirection","Test","RT","123");
-		
+		doMockSignUp("Redirection","Test","username3","password3");
+		new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.titleContains("Login"));
 		// Check if we have been redirected to the log in page.
 		Assertions.assertEquals("http://localhost:" + this.port + "/login", driver.getCurrentUrl());
 	}
@@ -154,8 +158,8 @@ class CloudStorageApplicationTests {
 	@Test
 	public void testBadUrl() {
 		// Create a test account
-		doMockSignUp("URL","Test","UT","123");
-		doLogIn("UT", "123");
+		doMockSignUp("URL","Test","username2","password2");
+		doLogIn("username2", "password2");
 		
 		// Try to access a random made-up URL.
 		driver.get("http://localhost:" + this.port + "/some-random-page");
@@ -178,11 +182,11 @@ class CloudStorageApplicationTests {
 	@Test
 	public void testLargeUpload() {
 		// Create a test account
-		doMockSignUp("Large File","Test","LFT","123");
-		doLogIn("LFT", "123");
+		doMockSignUp("Large File","Test","username1","password1");
+		doLogIn("username1", "password1");
 
 		// Try to upload an arbitrary large file
-		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
 		String fileName = "upload5m.zip";
 
 		webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(By.id("fileUpload")));
